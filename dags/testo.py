@@ -1,8 +1,27 @@
 from airflow.models import DAG
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-#from airflow.providers.postgres.hook.postgres import PostgresHook
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.utils.dates import days_ago
+
+def ingest_data():
+    hook = PostgresHook(postgres_conn_id = "ml_conn")
+    hook.insert_rows(
+        table = user_purchase,
+        rows = [
+            [
+                "a123456789",
+                "stockcode1",
+                "this is a detail text",
+                12,
+                "12/01/2010  8:26:00 AM",
+                2.55,
+                17850,
+                "Meshico"
+            ]
+        ]
+    )
 
 with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
 ) as dag:
@@ -12,7 +31,7 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         task_id="prepare",
         postgres_conn_id="ml_conn",
         sql="""
-            CREATE SCHEMA IF NOT EXIST POSTUSER;
+            CREATE SCHEMA POSTUSER;
             CREATE TABLE POSTUSER.user_purchase (
                 invoice_number varchar(10),
                 stock_code varchar(20),
@@ -25,7 +44,7 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
                 );
         """
     )
-    load = DummyOperator(task_id="load")
+    load = PythonOperator(task_id="load", python_callable=ingest_data)
     end_workflow = DummyOperator(task_id="end_workflow")
 
     start_workflow >> validate >> prepare >> load >> end_workflow
