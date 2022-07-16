@@ -8,7 +8,7 @@ from airflow.utils.dates import days_ago
 def ingest_data():
     hook = PostgresHook(postgres_conn_id = "ml_conn")
     hook.insert_rows(
-        table = user_purchase,
+        table = "user_purchase",
         rows = [
             [
                 "a123456789",
