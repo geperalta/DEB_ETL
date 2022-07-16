@@ -11,7 +11,19 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
     prepare = PostgresOperator(
         task_id="prepare",
         postgres_conn_id="ml_conn",
-        sql=""
+        sql="""
+            CREATE SCHEMA IF NOT EXIST POSTUSER;
+            CREATE TABLE POSTUSER.user_purchase (
+                invoice_number varchar(10),
+                stock_code varchar(20),
+                detail varchar(1000),
+                quantity int,
+                invoice_date timestamp,
+                unit_price numeric(8,3),
+                customer_id int,
+                country varchar(20)
+                );
+        """
     )
     load = DummyOperator(task_id="load")
     end_workflow = DummyOperator(task_id="end_workflow")
