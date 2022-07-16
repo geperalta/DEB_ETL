@@ -1,7 +1,7 @@
 from airflow.models import DAG
 from airflow.operators.dummy import DummyOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
-from airflow.providers.postgres.hook.postgres import PostgresHook
+#from airflow.providers.postgres.hook.postgres import PostgresHook
 from airflow.utils.dates import days_ago
 
 with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
