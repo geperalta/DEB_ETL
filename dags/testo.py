@@ -7,6 +7,6 @@ with DAG("testo_dago", start_date=days_ago(1)) as dag:
     validate = DummyOperator(task_id="validate")
     prepare = DummyOperator(task_id="prepare")
     load = DummyOperator(task_id="load")
-    end_workflow = DummyOperator(task_id="start_workflow")
+    end_workflow = DummyOperator(task_id="end_workflow")
 
     start_workflow >> validate >> prepare >> load >> end_workflow
