@@ -11,11 +11,11 @@ def ingest_data():
         table = "POSTUSER.user_purchase",
         rows = [
             [
-                "a123456789",
+                "GERAa56789",
                 "stockcode1",
-                "this is a detail text",
+                "Tengo mucho sueño",
                 12,
-                "12/01/2010  8:26:00 AM",
+                "18/07/2022  3:13:00 AM",
                 2.55,
                 17850,
                 "Meshico"
