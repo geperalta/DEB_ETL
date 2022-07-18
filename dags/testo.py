@@ -4,6 +4,7 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.utils.dates import days_ago
+from aiflorw.operators.sql import BranchSqlOperator
 
 def ingest_data():
     hook = PostgresHook(postgres_conn_id = "ml_conn")
@@ -31,8 +32,8 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         task_id="prepare",
         postgres_conn_id="ml_conn",
         sql="""
-            CREATE SCHEMA IF NOT EXISTS POSTUSER;
-            CREATE TABLE IF NOT EXISTS POSTUSER.user_purchase (
+            CREATE SCHEMA IF NOT EXISTS WIZESCHEMA;
+            CREATE TABLE IF NOT EXISTS WIZESCHEMA.user_purchase (
                 invoice_number varchar(10),
                 stock_code varchar(20),
                 detail varchar(1000),
@@ -44,7 +45,23 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
                 );
         """
     )
+    clear = PostgresOperator( #dag to clear the table if has data, for BRANCH example
+        task_id="clear",
+        postgres_conn_id="ml_conn",
+        sql="""DELETE FROM WIZESCHEMA.user_purchase""",
+    )
+    continue_workflow = DummyOperator(task_id="continue_workflow")
+    branch = BranchSqlOperator (
+        task_id='is_empty',
+        conn_id='ml_conn',
+        sql="SELECT COUNT(*) AS rows FROM WIZESCHEMA.user_purchase", 
+        #if the resould count is 1 the statement its TRUE and rune if_true branch
+        follow_task_ids_if_true=[clear.task_id],
+        follow_task_ids_if_false=[continue_workflow.task_id],
+    )
     load = PythonOperator(task_id="load", python_callable=ingest_data)
     end_workflow = DummyOperator(task_id="end_workflow")
 
-    start_workflow >> validate >> prepare >> load >> end_workflow
+    #DAGs order to execute
+    start_workflow >> validate >> prepare >> branch
+    branch >> [clear, continue_workflow] >> load >> end_workflow
