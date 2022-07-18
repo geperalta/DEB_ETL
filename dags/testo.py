@@ -14,7 +14,7 @@ def ingest_data():
         rows = [
             [
                 "GERAa56789",
-                "stockcode1",
+                "testocode1alv",
                 "Tengo mucho sueño",
                 12,
                 "07/18/2022  3:13:00 AM",
