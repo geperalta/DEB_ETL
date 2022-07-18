@@ -17,7 +17,7 @@ def ingest_data():
                 "stockcode1",
                 "Tengo mucho sueño",
                 12,
-                "18/07/2022  3:13:00 AM",
+                "07/18/2022  3:13:00 AM",
                 2.55,
                 17850,
                 "Meshico"
