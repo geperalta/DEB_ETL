@@ -52,7 +52,7 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
     )
     continue_workflow = DummyOperator(task_id="continue_workflow")
     branch = BranchSQLOperator (
-        task_id='is_empty??',
+        task_id='is_empty',
         conn_id='ml_conn',
         sql="SELECT COUNT(*) AS rows FROM WIZESCHEMA.user_purchase", 
         #if the resould count is 1 the statement its TRUE and rune if_true branch
