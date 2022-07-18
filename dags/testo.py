@@ -10,7 +10,7 @@ from airflow.utils.trigger_rule import TriggerRule
 def ingest_data():
     hook = PostgresHook(postgres_conn_id = "ml_conn")
     hook.insert_rows(
-        table = "POSTUSER.user_purchase",
+        table = "WIZESCHEMA.user_purchase",
         rows = [
             [
                 "GERAa56789",
