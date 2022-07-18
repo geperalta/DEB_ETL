@@ -56,14 +56,14 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         task_id='is_empty',
         conn_id='ml_conn',
         sql="SELECT COUNT(*) AS rows FROM WIZESCHEMA.user_purchase", 
-        #if the resould count is 1 the statement its TRUE and rune if_true branch
+        #if the result count is 1 the statement its TRUE and rune if_true branch
         follow_task_ids_if_true=[clear.task_id],
         follow_task_ids_if_false=[continue_workflow.task_id],
     )
     load = PythonOperator(
         task_id="load", 
         python_callable=ingest_data,
-        triger_rule=TriggerRule.ONE_SUCCESS,)
+        trigger_rule=TriggerRule.ONE_SUCCESS,)
     end_workflow = DummyOperator(task_id="end_workflow")
 
     #DAGs order to execute. Downstring
