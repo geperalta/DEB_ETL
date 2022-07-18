@@ -4,7 +4,7 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.utils.dates import days_ago
-from aiflorw.operators.sql import BranchSqlOperator
+from airflow.operators.sql import BranchSqlOperator
 
 def ingest_data():
     hook = PostgresHook(postgres_conn_id = "ml_conn")
