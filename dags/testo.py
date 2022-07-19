@@ -4,28 +4,36 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
-#from airflow.providers.amazon.hooks.s3 import S3Hook
+from airflow.providers.amazon.hooks.s3 import S3Hook
 from airflow.utils.dates import days_ago
 from airflow.operators.sql import BranchSQLOperator
 from airflow.utils.trigger_rule import TriggerRule
 
 def ingest_data():
-    hook = PostgresHook(postgres_conn_id = "ml_conn")
-    hook.insert_rows(
-        table = "WIZESCHEMA.user_purchase",
-        rows = [
-            [
-                "GERAa12345",
-                "testdellamada",
-                "Tengo mucho sueño",
-                12,
-                "07/18/2022  3:13:00 AM",
-                2.55,
-                17850,
-                "Meshico"
-            ]
-        ]
+    s3_hook = S3Hook(aws_conn_id="aws_default",)
+    psql_hook = PostgresHook(postgres_conn_id = "ml_conn")
+    file = s3_hook.download_file(
+        bucket_name="s3-gera-data-bootcamp-198920220629062530475400000001",
+        key="CSVs/user_purchase.csv"
     )
+
+    psql_hook.bulk_data(table="WIZESCHEMA.user_purchase", tmp_file=file)
+    ##Edited to ingest data from the S3 File
+    # psql_hook.insert_rows(
+    #     table = "WIZESCHEMA.user_purchase",
+    #     rows = [
+    #         [
+    #             "GERAa12345",
+    #             "testdellamada",
+    #             "Tengo mucho sueño",
+    #             12,
+    #             "07/18/2022  3:13:00 AM",
+    #             2.55,
+    #             17850,
+    #             "Meshico"
+    #         ]
+    #     ]
+    # )
 
 with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
 ) as dag:
@@ -73,6 +81,6 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         trigger_rule=TriggerRule.ONE_SUCCESS,)
     end_workflow = DummyOperator(task_id="end_workflow")
 
-    #DAGs order to execute. Downstring
+    #DAGs order to execute. downstream
     start_workflow >> validate >> prepare >> branch
     branch >> [clear, continue_workflow] >> load >> end_workflow
