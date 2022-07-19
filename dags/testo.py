@@ -13,8 +13,8 @@ def ingest_data():
         table = "WIZESCHEMA.user_purchase",
         rows = [
             [
-                "GERAa56789",
-                "testocode1alv",
+                "GERAa12345",
+                "testdellamada",
                 "Tengo mucho sueño",
                 12,
                 "07/18/2022  3:13:00 AM",
