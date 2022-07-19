@@ -16,8 +16,10 @@ def ingest_data():
         bucket_name="s3-gera-data-bootcamp-198920220629062530475400000001",
         key="CSVs/user_purchase.csv"
     )
+    psql_hook.bulk_load(table="WIZESCHEMA.user_purchase", tmp_file=file)
+    ##UPGRADE!!Instead to Download and then ADD the data bulk to table
+    #  we can use a LAMBDA to read S3 loop it and add column by column to RDS
 
-    psql_hook.bulk_data(table="WIZESCHEMA.user_purchase", tmp_file=file)
     ##Edited to ingest data from the S3 File
     # psql_hook.insert_rows(
     #     table = "WIZESCHEMA.user_purchase",
