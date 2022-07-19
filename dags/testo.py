@@ -3,7 +3,8 @@ from airflow.operators.dummy import DummyOperator
 from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from ariflow.providers.amazon.aws.sensors.s3 import S3KeySensor
+from airflow.providers.postgres.hooks.s3 import S3Hook
+from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
 from airflow.utils.dates import days_ago
 from airflow.operators.sql import BranchSQLOperator
 from airflow.utils.trigger_rule import TriggerRule
