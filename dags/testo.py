@@ -52,14 +52,14 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         sql="""
             CREATE SCHEMA IF NOT EXISTS WIZESCHEMA;
             CREATE TABLE IF NOT EXISTS WIZESCHEMA.user_purchase (
-                invoice_number varchar(100),
-                stock_code varchar(20),
-                detail varchar(1000),
-                quantity int,
-                invoice_date timestamp,
-                unit_price numeric(8,3),
-                customer_id int,
-                country varchar(20)
+                InvoiceNo varchar(10),
+                StockCode varchar(20),
+                Description varchar(1000),
+                Quantity int,
+                InvoiceDate timestamp,
+                UnitPrice numeric(8,3),
+                CustomerID int,
+                Country varchar(20)
                 );
         """
     )
