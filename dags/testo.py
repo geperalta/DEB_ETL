@@ -39,9 +39,9 @@ def ingest_data():
     #     ]
     # )
     psql_hook.copy_expert(sql = """COPY WIZESCHEMA.user_purchase(
-                invoice_number,
+                invoice_no,
                 stock_code,
-                detail,
+                description,
                 quantity,
                 invoice_date,
                 unit_price,
@@ -71,7 +71,7 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
                 quantity int,
                 invoice_date timestamp,
                 unit_price numeric(8,3),
-                customerid int,
+                customer_id int,
                 country varchar(20)
                 );
         """
