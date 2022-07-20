@@ -16,7 +16,7 @@ def ingest_data():
         bucket_name="s3-gera-data-bootcamp-198920220629062530475400000001",
         key="CSVs/user_purchase.csv"
     )
-    psql_hook.bulk_load(table="WIZESCHEMA.user_purchase", tmp_file=file)
+    #psql_hook.bulk_load(table="WIZESCHEMA.user_purchase", tmp_file=file) #<-this is the one JM changed for .copyexpert
     ##UPGRADE!!Instead to Download and then ADD the data bulk to table
     #  we can use a LAMBDA to read S3 loop it and add column by column to RDS
 
@@ -36,6 +36,17 @@ def ingest_data():
     #         ]
     #     ]
     # )
+    psql_hook.copy_expert(sql = """COPY deb.user_purchase(
+                invoice_number,
+                stock_code,
+                detail,
+                quantity,
+                invoice_date,
+                unit_price,
+                customer_id,
+                country) 
+                FROM STDIN
+                DELIMITER ',' CSV HEADER;""", filename = file)
 
 with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
 ) as dag:
