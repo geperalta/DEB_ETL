@@ -45,7 +45,7 @@ def ingest_data():
                 quantity,
                 invoice_date,
                 unit_price,
-                customer_id,
+                customer_id2,
                 country) 
                 FROM STDIN
                 DELIMITER ',' CSV HEADER;""", filename = file)
