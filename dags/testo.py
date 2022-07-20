@@ -39,13 +39,13 @@ def ingest_data():
     #     ]
     # )
     psql_hook.copy_expert(sql = """COPY WIZESCHEMA.user_purchase(
-                invoice_no,
+                invoice_number,
                 stock_code,
-                description,
+                detail,
                 quantity,
                 invoice_date,
                 unit_price,
-                customer_id2,
+                customer_id,
                 country) 
                 FROM STDIN
                 DELIMITER ',' CSV HEADER;""", filename = file)
@@ -65,9 +65,9 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         sql="""
             CREATE SCHEMA IF NOT EXISTS WIZESCHEMA;
             CREATE TABLE IF NOT EXISTS WIZESCHEMA.user_purchase (
-                invoice_no varchar(10),
+                invoice_number varchar(10),
                 stock_code varchar(20),
-                description varchar(1000),
+                detail varchar(1000),
                 quantity int,
                 invoice_date timestamp,
                 unit_price numeric(8,3),
