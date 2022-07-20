@@ -23,6 +23,8 @@ def ingest_data():
     ##Edited to ingest data from the S3 File
     # psql_hook.insert_rows(
     #     table = "WIZESCHEMA.user_purchase",
+
+    #manual entries for test
     #     rows = [
     #         [
     #             "GERAa12345",
@@ -36,7 +38,7 @@ def ingest_data():
     #         ]
     #     ]
     # )
-    psql_hook.copy_expert(sql = """COPY deb.user_purchase(
+    psql_hook.copy_expert(sql = """COPY WIZESCHEMA.user_purchase(
                 invoice_number,
                 stock_code,
                 detail,
