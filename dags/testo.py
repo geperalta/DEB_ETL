@@ -79,13 +79,13 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
     clear = PostgresOperator( #dag to clear the table if has data, for BRANCH example
         task_id="clear",
         postgres_conn_id="ml_conn",
-        sql="""DELETE FROM WIZESCHEMA.user_purchase""",
+        sql="""DELETE FROM wize.user_purchase""",
     )
     continue_workflow = DummyOperator(task_id="continue_workflow")
     branch = BranchSQLOperator (
         task_id='is_empty',
         conn_id='ml_conn',
-        sql="SELECT COUNT(*) AS rows FROM WIZESCHEMA.user_purchase", 
+        sql="SELECT COUNT(*) AS rows FROM wize.user_purchase", 
         #if the result count is 1 the statement its TRUE and rune if_true branch
         follow_task_ids_if_true=[clear.task_id],
         follow_task_ids_if_false=[continue_workflow.task_id],
