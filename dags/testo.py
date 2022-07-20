@@ -38,7 +38,7 @@ def ingest_data():
     #         ]
     #     ]
     # )
-    psql_hook.copy_expert(sql = """COPY WIZESCHEMA.user_purchase(
+    psql_hook.copy_expert(sql = """COPY wize.user_purchase(
                 invoice_number,
                 stock_code,
                 detail,
@@ -63,8 +63,8 @@ with DAG("testo_dago", start_date=days_ago(1), schedule_interval="@once"
         task_id="prepare",
         postgres_conn_id="ml_conn",
         sql="""
-            CREATE SCHEMA IF NOT EXISTS WIZESCHEMA;
-            CREATE TABLE IF NOT EXISTS WIZESCHEMA.user_purchase (
+            CREATE SCHEMA IF NOT EXISTS wize;
+            CREATE TABLE IF NOT EXISTS wize.user_purchase (
                 invoice_number varchar(10),
                 stock_code varchar(20),
                 detail varchar(1000),
